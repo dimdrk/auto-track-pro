@@ -17,7 +17,6 @@ import lombok.Setter;
 @Setter
 public class VehicleReadOnlyDTO {
 
-    private Long id;
     private String VIN;
     private String licencePlate;
     private String make;
