@@ -37,7 +37,7 @@ public class Vehicle extends AbstractEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String VIN;
+    private String vin;
 
     @Column(unique=true)
     private String licencePlate;
