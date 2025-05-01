@@ -23,6 +23,9 @@ public class ServiceRecordUpdateDTO {
     @NotNull(message = "Description must not be null.")
     private String description;
 
+    @NotNull(message = "Odometer must not be null.")
+    private String odometer;
+
     @NotNull(message = "Parts must not be null.")
     private String parts;
 
@@ -37,8 +40,4 @@ public class ServiceRecordUpdateDTO {
 
     @NotNull(message = "Warranty must not be null.")
     private String warranty;
-
-    @NotNull(message = "Odometer must not be null.")
-    private String odometer;    
-    
 }
