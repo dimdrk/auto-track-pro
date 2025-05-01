@@ -1,5 +1,61 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper;
 
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleInsertDTO;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleReadOnlyDTO;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleUpdateDTO;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Vehicle;
+
 public class VehicleMapper {
     
+    public VehicleReadOnlyDTO mapToVehicleReadOnlyDTO(Vehicle vehicle) {
+        var dto = new VehicleReadOnlyDTO();
+
+        dto.setVIN(vehicle.getVIN());
+        dto.setLicencePlate(vehicle.getLicencePlate());
+        dto.setMake(vehicle.getMake());
+        dto.setModel(vehicle.getModel());
+        dto.setType(vehicle.getType());
+        dto.setColor(vehicle.getColor());
+        dto.setProductionDate(vehicle.getProductionDate());
+        dto.setFuel(vehicle.getFuel());
+        dto.setGearbox(vehicle.getGearbox());
+        dto.setOdometer(vehicle.getOdometer());
+
+        return dto;
+    }
+
+    public Vehicle mapToVehicleEntity(VehicleInsertDTO vehicleInsertDTO) {
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.setVIN(vehicleInsertDTO.getVIN());
+        vehicle.setLicencePlate(vehicleInsertDTO.getLicencePlate());
+        vehicle.setMake(vehicleInsertDTO.getMake());
+        vehicle.setModel(vehicleInsertDTO.getModel());
+        vehicle.setType(vehicleInsertDTO.getType());
+        vehicle.setColor(vehicleInsertDTO.getColor());
+        vehicle.setProductionDate(vehicleInsertDTO.getProductionDate());
+        vehicle.setFuel(vehicleInsertDTO.getFuel());
+        vehicle.setGearbox(vehicleInsertDTO.getGearbox());
+        vehicle.setOdometer(vehicleInsertDTO.getOdometer());
+
+        return vehicle;
+    }
+
+    public Vehicle mapToVehicleUpdateDTO(VehicleUpdateDTO vehicleUpdateDTO) {
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.setVIN(vehicleUpdateDTO.getVIN());
+        vehicle.setLicencePlate(vehicleUpdateDTO.getLicencePlate());
+        vehicle.setMake(vehicleUpdateDTO.getMake());
+        vehicle.setModel(vehicleUpdateDTO.getModel());
+        vehicle.setType(vehicleUpdateDTO.getType());
+        vehicle.setColor(vehicleUpdateDTO.getColor());
+        vehicle.setProductionDate(vehicleUpdateDTO.getProductionDate());
+        vehicle.setFuel(vehicleUpdateDTO.getFuel());
+        vehicle.setGearbox(vehicleUpdateDTO.getGearbox());
+        vehicle.setOdometer(vehicleUpdateDTO.getOdometer());
+
+        return vehicle;
+    }
+
 }

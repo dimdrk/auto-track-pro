@@ -2,6 +2,7 @@ package gr.dimitriosdrakopoulos.projects.auto_track_pro.dto;
 
 import java.time.LocalDate;
 
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Color;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Fuel;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Gearbox;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.VehicleType;
@@ -15,13 +16,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VehicleReadOnlyDTO {
+
+    private Long id;
+    private String VIN;
+    private String licencePlate;
     private String make;
     private String model;
+    private VehicleType type;
+    private Color color;
     private LocalDate productionDate;
-    private Fuel fuelType;
+    private Fuel fuel;
     private Gearbox gearbox;
     private String odometer;
-    private VehicleType type;
-    private String VIN;
-    private String color;
 }

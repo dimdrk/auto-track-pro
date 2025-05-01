@@ -58,7 +58,7 @@ public class Vehicle extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private Gearbox gearbox;
 
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private String odometer;
     
 }
