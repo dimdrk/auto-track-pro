@@ -1,5 +1,7 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -7,4 +9,7 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Driver;
 
 public interface DriverRepository extends JpaRepository<Driver, Long>, JpaSpecificationExecutor<Driver>  {
     
+    Optional<Driver> findByUserId(Long userId);
+    Optional<Driver> findByUuid(String uuid);
+    Optional<Driver> findByDriverLicence(String driverLicence);
 }
