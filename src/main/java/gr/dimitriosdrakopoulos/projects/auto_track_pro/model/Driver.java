@@ -1,6 +1,8 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
@@ -10,6 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -48,6 +52,19 @@ public class Driver extends AbstractEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToMany
+    @JoinTable(name = "drivers_vehicles")
+    private Set<Vehicle> driverVehicles = new HashSet<>();
+
+    public void addVehicle(Vehicle vehicle) {
+        if (driverVehicles == null) driverVehicles = new HashSet<>();
+        driverVehicles.add(vehicle);
+    }
+
+    public  boolean hasVehicles(Vehicle vehicle) {
+        return driverVehicles != null && !driverVehicles.isEmpty();
+    }
 
     @PrePersist
     public  void initializeUUID() {

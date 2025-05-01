@@ -1,13 +1,17 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,4 +55,8 @@ public class ServiceRecord extends AbstractEntity {
 
     @Column(nullable = false)
     private String warranty;
+    
+    @Getter(AccessLevel.PRIVATE)
+    @ManyToMany(mappedBy = "vehicleServiceRecords")
+    private Set<Vehicle> vehicles = new HashSet<>();
 }

@@ -1,6 +1,8 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.model;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Color;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Fuel;
@@ -13,7 +15,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,5 +65,25 @@ public class Vehicle extends AbstractEntity {
 
     @Column(nullable = false)
     private String odometer;
+
+    @Getter(AccessLevel.PRIVATE)
+    @ManyToMany(mappedBy = "ownerVehicles")
+    private Set<Owner> owners = new HashSet<>();
     
+    @Getter(AccessLevel.PRIVATE)
+    @ManyToMany(mappedBy = "driverVehicles")
+    private Set<Driver> drivers = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "vehicles_service_records")
+    private Set<ServiceRecord> vehicleServiceRecords = new HashSet<>();
+
+    public void addServiceRecord(ServiceRecord serviceRecord) {
+        if (vehicleServiceRecords == null) vehicleServiceRecords = new HashSet<>();
+        vehicleServiceRecords.add(serviceRecord);
+    }
+
+    public  boolean hasServiceRecords(ServiceRecord serviceRecord) {
+        return vehicleServiceRecords != null && !vehicleServiceRecords.isEmpty();
+    }
 }
