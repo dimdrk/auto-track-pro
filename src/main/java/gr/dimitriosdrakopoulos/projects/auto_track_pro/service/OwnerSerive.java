@@ -26,6 +26,7 @@ public class OwnerSerive {
     private final OwnerRepository ownerRepository;
     private final UserRepository userRepository;
 
+    @Transactional(rollbackOn = Exception.class)
     public OwnerReadOnlyDTO saveOwner(OwnerInsertDTO ownerInsertDTO) throws AppObjectAlreadyExists {
 
         if (userRepository.findByUsername(ownerInsertDTO.getUser().getUsername()).isPresent()) {
