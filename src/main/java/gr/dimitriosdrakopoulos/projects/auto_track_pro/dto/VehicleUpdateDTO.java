@@ -20,7 +20,7 @@ import lombok.Setter;
 public class VehicleUpdateDTO {
 
     @NotNull(message = "VIN must not be null.")
-    private String VIN;
+    private String vin;
     
     @NotNull(message = "Licence plate must not be null.")
     private String licencePlate;

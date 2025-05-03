@@ -10,7 +10,7 @@ public class VehicleMapper {
     public VehicleReadOnlyDTO mapToVehicleReadOnlyDTO(Vehicle vehicle) {
         var dto = new VehicleReadOnlyDTO();
 
-        dto.setVIN(vehicle.getVin());
+        dto.setVin(vehicle.getVin());
         dto.setLicencePlate(vehicle.getLicencePlate());
         dto.setMake(vehicle.getMake());
         dto.setModel(vehicle.getModel());
@@ -27,7 +27,7 @@ public class VehicleMapper {
     public Vehicle mapToVehicleEntity(VehicleInsertDTO vehicleInsertDTO) {
         Vehicle vehicle = new Vehicle();
 
-        vehicle.setVin(vehicleInsertDTO.getVIN());
+        vehicle.setVin(vehicleInsertDTO.getVin());
         vehicle.setLicencePlate(vehicleInsertDTO.getLicencePlate());
         vehicle.setMake(vehicleInsertDTO.getMake());
         vehicle.setModel(vehicleInsertDTO.getModel());
@@ -44,7 +44,7 @@ public class VehicleMapper {
     public Vehicle mapToVehicleUpdateDTO(VehicleUpdateDTO vehicleUpdateDTO) {
         Vehicle vehicle = new Vehicle();
 
-        vehicle.setVin(vehicleUpdateDTO.getVIN());
+        vehicle.setVin(vehicleUpdateDTO.getVin());
         vehicle.setLicencePlate(vehicleUpdateDTO.getLicencePlate());
         vehicle.setMake(vehicleUpdateDTO.getMake());
         vehicle.setModel(vehicleUpdateDTO.getModel());
