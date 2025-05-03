@@ -51,9 +51,7 @@ public class AdminService {
         }
 
         Admin admin = adminMapper.mapToAdminEntity(adminInsertDTO);
-
         Admin savedAdmin = adminRepository.save(admin);
-
         return adminMapper.mapToAdminReadOnlyDTO(savedAdmin);        
     }
 
@@ -65,9 +63,7 @@ public class AdminService {
         }
         
         Admin admin = adminMapper.mapToAdminUpdateDTO(adminUpdateDTO);
-
         Admin updatedAdmin = adminRepository.save(admin);
-
         return adminMapper.mapToAdminReadOnlyDTO(updatedAdmin);
     }
 
