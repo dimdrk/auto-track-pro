@@ -1,10 +1,15 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper;
 
+import org.springframework.stereotype.Component;
+
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Vehicle;
+import lombok.RequiredArgsConstructor;
 
+@Component
+@RequiredArgsConstructor
 public class VehicleMapper {
     
     public VehicleReadOnlyDTO mapToVehicleReadOnlyDTO(Vehicle vehicle) {

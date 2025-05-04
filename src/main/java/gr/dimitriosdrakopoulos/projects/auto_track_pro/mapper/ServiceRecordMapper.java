@@ -1,10 +1,15 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper;
 
+import org.springframework.stereotype.Component;
+
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.ServiceRecord;
+import lombok.RequiredArgsConstructor;
 
+@Component
+@RequiredArgsConstructor
 public class ServiceRecordMapper {
     
     public ServiceRecordReadOnlyDTO mapServiceRecordReadOnlyDTO(ServiceRecord serviceRecord) {
