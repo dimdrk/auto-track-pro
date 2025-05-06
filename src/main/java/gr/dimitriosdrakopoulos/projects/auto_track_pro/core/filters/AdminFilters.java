@@ -10,7 +10,7 @@ import org.springframework.lang.Nullable;
 @ToString
 @Builder
 public class AdminFilters extends GenericFilters {
-// TODO
+
     @Nullable
     private String uuid;
 

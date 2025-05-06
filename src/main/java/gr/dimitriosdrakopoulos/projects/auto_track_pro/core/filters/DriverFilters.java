@@ -10,7 +10,7 @@ import org.springframework.lang.Nullable;
 @ToString
 @Builder
 public class DriverFilters extends GenericFilters {
-// TODO
+
     @Nullable
     private String uuid;
 
