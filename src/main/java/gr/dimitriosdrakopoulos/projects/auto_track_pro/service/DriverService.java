@@ -1,13 +1,19 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.DriverFilters;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.DriverSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverUpdateDTO;
@@ -86,4 +92,25 @@ public class DriverService {
         Pageable pageable = PageRequest.of(page, size, sort);
         return driverRepository.findAll(pageable).map(driverMapper::mapToDriverReadOnlyDTO);
     }
+
+    @org.springframework.transaction.annotation.Transactional
+    public Paginated<DriverReadOnlyDTO> getDriversFilteredPaginated(DriverFilters filters) {
+        var filtered = driverRepository.findAll(getSpecsFromFilters(filters), filters.getPageable());
+        return new Paginated<>(filtered.map(driverMapper::mapToDriverReadOnlyDTO));
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public List<DriverReadOnlyDTO> getDriversFiltered(DriverFilters filters) {
+        return driverRepository.findAll(getSpecsFromFilters(filters))
+                .stream().map(driverMapper::mapToDriverReadOnlyDTO).toList();
+    }
+
+    private Specification<Driver> getSpecsFromFilters(DriverFilters filters) {
+        return Specification
+                .where(DriverSpecification.driverStringFieldLike("uuid", filters.getUuid()))
+                .and(DriverSpecification.driverUsernameIs(filters.getUsername()))
+                .and(DriverSpecification.driverUserEmailIs(filters.getUserEmail()))
+                .and(DriverSpecification.driverUserIsActive(filters.getActive()));
+    }
+
 }
