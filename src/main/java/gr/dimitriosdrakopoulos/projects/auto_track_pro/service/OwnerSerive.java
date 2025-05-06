@@ -1,13 +1,19 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.OwnerFilters;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.OwnerSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerUpdateDTO;
@@ -72,7 +78,7 @@ public class OwnerSerive {
         ownerRepository.deleteById(id);
     }
 
-    public Page<OwnerReadOnlyDTO> getPaginatedAdmins(int page, int size) {
+    public Page<OwnerReadOnlyDTO> getPaginatedOwners(int page, int size) {
 
         String defaultSort = "id";
         Pageable pageable = PageRequest.of(page, size, Sort.by(defaultSort).ascending());
@@ -80,12 +86,32 @@ public class OwnerSerive {
         return ownerRepository.findAll(pageable).map(ownerMapper::mapToOwnerReadOnlyDTO);
     }
 
-    public Page<OwnerReadOnlyDTO> getPaginatedSortedAdmins(int page, int size, String sortBy, String sortDirection) {
+    public Page<OwnerReadOnlyDTO> getPaginatedSortedOwners(int page, int size, String sortBy, String sortDirection) {
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return ownerRepository.findAll(pageable).map(ownerMapper::mapToOwnerReadOnlyDTO);
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public Paginated<OwnerReadOnlyDTO> getOwnersFilteredPaginated(OwnerFilters filters) {
+        var filtered = ownerRepository.findAll(getSpecsFromFilters(filters), filters.getPageable());
+        return new Paginated<>(filtered.map(ownerMapper::mapToOwnerReadOnlyDTO));
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public List<OwnerReadOnlyDTO> getOwnersFiltered(OwnerFilters filters) {
+        return ownerRepository.findAll(getSpecsFromFilters(filters))
+                .stream().map(ownerMapper::mapToOwnerReadOnlyDTO).toList();
+    }
+
+    private Specification<Owner> getSpecsFromFilters(OwnerFilters filters) {
+        return Specification
+                .where(OwnerSpecification.ownerStringFieldLike("uuid", filters.getUuid()))
+                .and(OwnerSpecification.ownerUsernameIs(filters.getUsername()))
+                .and(OwnerSpecification.ownerUserEmailIs(filters.getUserEmail()))
+                .and(OwnerSpecification.ownerUserIsActive(filters.getActive()));
     }
 
 }
