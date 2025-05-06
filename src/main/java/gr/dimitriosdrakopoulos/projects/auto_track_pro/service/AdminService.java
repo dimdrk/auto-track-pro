@@ -4,6 +4,9 @@ package gr.dimitriosdrakopoulos.projects.auto_track_pro.service;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.AdminFilters;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.AdminSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminUpdateDTO;
@@ -91,6 +97,26 @@ public class AdminService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return adminRepository.findAll(pageable).map(adminMapper::mapToAdminReadOnlyDTO);
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public Paginated<AdminReadOnlyDTO> getAdminsFilteredPaginated(AdminFilters filters) {
+        var filtered = adminRepository.findAll(getSpecsFromFilters(filters), filters.getPageable());
+        return new Paginated<>(filtered.map(adminMapper::mapToAdminReadOnlyDTO));
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public List<AdminReadOnlyDTO> getAdminsFiltered(AdminFilters filters) {
+        return adminRepository.findAll(getSpecsFromFilters(filters))
+                .stream().map(adminMapper::mapToAdminReadOnlyDTO).toList();
+    }
+
+    private Specification<Admin> getSpecsFromFilters(AdminFilters filters) {
+        return Specification
+                .where(AdminSpecification.adminStringFieldLike("uuid", filters.getUuid()))
+                .and(AdminSpecification.adminUsernameIs(filters.getUsername()))
+                .and(AdminSpecification.adminUserEmailIs(filters.getUserEmail()))
+                .and(AdminSpecification.adminUserIsActive(filters.getActive()));
     }
 
 }
