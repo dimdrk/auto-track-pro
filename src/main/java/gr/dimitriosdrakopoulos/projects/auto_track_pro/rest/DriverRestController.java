@@ -33,7 +33,7 @@ public class DriverRestController {
     private final DriverService driverService;
 
     
-    @GetMapping("/admins")
+    @GetMapping("/drivers")
     public ResponseEntity<Page<DriverReadOnlyDTO>> getAllDrivers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -42,7 +42,7 @@ public class DriverRestController {
         return new ResponseEntity<>(driversPage, HttpStatus.OK);
     }
 
-    @PostMapping("/admins/all")
+    @PostMapping("/drivers/all")
     public ResponseEntity<List<DriverReadOnlyDTO>> getDrivers(@Nullable @RequestBody DriverFilters filters, Principal principal)
             throws AppObjectNotFoundException, AppObjectNotAuthorizedException {
         try {
@@ -54,7 +54,7 @@ public class DriverRestController {
         }
     }
     
-    @PostMapping("/admins/all/paginated")
+    @PostMapping("/drivers/all/paginated")
     public ResponseEntity<Paginated<DriverReadOnlyDTO>> getAdminsPaginated(@Nullable @RequestBody DriverFilters filters, Principal principal)
             throws AppObjectNotFoundException, AppObjectNotAuthorizedException {
         try {
