@@ -1,13 +1,19 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.VehicleFilters;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.VehicleSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleUpdateDTO;
@@ -75,5 +81,25 @@ public class VehicleService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return vehicleRepository.findAll(pageable).map(vehicleMapper::mapToVehicleReadOnlyDTO);
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public Paginated<VehicleReadOnlyDTO> getVehiclesFilteredPaginated(VehicleFilters filters) {
+        var filtered = vehicleRepository.findAll(getSpecsFromFilters(filters), filters.getPageable());
+        return new Paginated<>(filtered.map(vehicleMapper::mapToVehicleReadOnlyDTO));
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public List<VehicleReadOnlyDTO> getVehiclesFiltered(VehicleFilters filters) {
+        return vehicleRepository.findAll(getSpecsFromFilters(filters))
+                .stream().map(vehicleMapper::mapToVehicleReadOnlyDTO).toList();
+    }
+
+    private Specification<Vehicle> getSpecsFromFilters(VehicleFilters filters) {
+        return Specification
+                .where(VehicleSpecification.vehicleStringFieldLike("id", filters.getId()))
+                .and(VehicleSpecification.vehicleStringFieldLike("licencePlate", filters.getLicencePlate()))
+                .and(VehicleSpecification.vehicleStringFieldLike("vin", filters.getVin()))
+                .and(VehicleSpecification.vehicleOwnerIs(filters.getUsername()));
     }
 }
