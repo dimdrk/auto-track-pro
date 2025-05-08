@@ -1,5 +1,6 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.UserInsertDTO;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class UserMapper {
+
+    private final PasswordEncoder passwordEncoder;
     
     public UserReadOnlyDTO mapToUserReadOnlyDTO(User user) {
         var dto = new UserReadOnlyDTO();
@@ -28,7 +31,7 @@ public class UserMapper {
         User user = new User();
 
         user.setUsername(userInsertDTO.getUsername());
-        user.setPassword(userInsertDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userInsertDTO.getPassword()));
         user.setFirstname(userInsertDTO.getFirstname());
         user.setLastname(userInsertDTO.getLastname());
         user.setEmail(userInsertDTO.getEmail());
@@ -43,7 +46,7 @@ public class UserMapper {
         User user = new User();
 
         user.setUsername(userUpdateDTO.getUsername());
-        user.setPassword(userUpdateDTO.getPassword());
+        user.setPassword(passwordEncoder.encode(userUpdateDTO.getPassword()));
         user.setFirstname(userUpdateDTO.getFirstname());
         user.setLastname(userUpdateDTO.getLastname());
         user.setEmail(userUpdateDTO.getEmail());
