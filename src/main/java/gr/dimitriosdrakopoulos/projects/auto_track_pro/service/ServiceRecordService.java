@@ -1,13 +1,19 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.ServiceRecordFilters;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.ServiceRecordSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordUpdateDTO;
@@ -69,5 +75,25 @@ public class ServiceRecordService {
         Pageable pageable = PageRequest.of(page, size, sort);
 
         return serviceRecordRepository.findAll(pageable).map(serviceRecordMapper::mapServiceRecordReadOnlyDTO);
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public Paginated<ServiceRecordReadOnlyDTO> getServiceRecordsFilteredPaginated(ServiceRecordFilters filters) {
+        var filtered = serviceRecordRepository.findAll(getSpecsFromFilters(filters), filters.getPageable());
+        return new Paginated<>(filtered.map(serviceRecordMapper::mapServiceRecordReadOnlyDTO));
+    }
+
+    @org.springframework.transaction.annotation.Transactional
+    public List<ServiceRecordReadOnlyDTO> getServiceRecordsFiltered(ServiceRecordFilters filters) {
+        return serviceRecordRepository.findAll(getSpecsFromFilters(filters))
+                .stream().map(serviceRecordMapper::mapServiceRecordReadOnlyDTO).toList();
+    }
+
+    @SuppressWarnings("null")
+    private Specification<ServiceRecord> getSpecsFromFilters(ServiceRecordFilters filters) {
+        return Specification
+                .where(ServiceRecordSpecification.serviceRecordVehicleIs(filters.getLicencePlate()))
+                .and(ServiceRecordSpecification.serviceRecordStringFieldLike("id", filters.getId()))
+                .and(ServiceRecordSpecification.serviceRecordStringFieldLike("dateOfService", filters.getDateOfService().toString()));
     }
 }
