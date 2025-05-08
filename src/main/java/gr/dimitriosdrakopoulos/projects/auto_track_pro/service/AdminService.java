@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectInvalidArgumentException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.AdminFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
@@ -38,7 +39,7 @@ public class AdminService {
     
     @Transactional(rollbackOn = Exception.class)
     public AdminReadOnlyDTO saveAdmin(AdminInsertDTO adminInsertDTO) 
-            throws AppObjectAlreadyExists {
+            throws AppObjectAlreadyExists, AppObjectInvalidArgumentException {
 
         if (userRepository.findByUsername(adminInsertDTO.getUser().getUsername()).isPresent()) {
             throw new AppObjectAlreadyExists("User", "User with username: " + adminInsertDTO.getUser().getUsername() + " already exist.");
