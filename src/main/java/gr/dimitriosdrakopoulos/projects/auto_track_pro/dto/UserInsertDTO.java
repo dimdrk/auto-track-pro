@@ -1,7 +1,7 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.dto;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Gender;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Role;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.RoleType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -41,5 +41,5 @@ public class UserInsertDTO {
     private Gender gender;
 
     @NotNull(message = "Role must not be null.")
-    private Role role;
+    private RoleType role;
 }

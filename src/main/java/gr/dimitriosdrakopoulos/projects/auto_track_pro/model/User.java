@@ -1,7 +1,7 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.model;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Gender;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Role;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,8 +43,9 @@ public class User extends AbstractEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleType roleType;
 
     @ColumnDefault("true")
     @Column(name = "is_active")
@@ -73,7 +74,7 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(roleType.name()));
     }
 
     @Override

@@ -2,6 +2,7 @@ package gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.RoleType;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Admin;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.User;
 import jakarta.persistence.criteria.Join;
@@ -42,6 +43,17 @@ public class AdminSpecification {
 
             Join<Admin, User> user = root.join("user");
             return criteriaBuilder.equal(user.get("isActive"), isActive);
+        });
+    }
+
+    public static Specification<Admin> adminUserRole(RoleType role) {
+        return ((root, query, criteriaBuilder) -> {
+            if (role ==null) {
+                return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+            }
+
+            Join<Admin, User> user = root.join("user");
+            return criteriaBuilder.equal(user.get("role"), role);
         });
     }
 

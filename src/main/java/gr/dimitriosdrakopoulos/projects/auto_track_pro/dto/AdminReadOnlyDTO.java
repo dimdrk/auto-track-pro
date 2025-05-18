@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdminReadOnlyDTO {
-    private Long id;
     private Boolean isActive;
     private String driverLicence;
     private LocalDate licenceExpiration;
