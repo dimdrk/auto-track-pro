@@ -16,7 +16,6 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // private String secretKey = System.getenv("SECRET_KEY");
     private String secretKey = "f61c887ded298c84270c8a94e9457a85f4fefb80ebaef7837438a05d9068a52c";
     private Long jwtExpiration = 10_800_000L;   // 3 hours
 
@@ -30,7 +29,7 @@ public class JwtService {
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.ES256)
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
