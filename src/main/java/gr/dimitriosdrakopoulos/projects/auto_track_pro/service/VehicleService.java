@@ -66,6 +66,18 @@ public class VehicleService {
 
         vehicleRepository.deleteById(id);
     }
+    
+    // Check if usefull
+    public VehicleReadOnlyDTO getVehicleById(Long id) throws AppObjectNotFoundException {
+
+        if (vehicleRepository.findById(id).isEmpty()) {
+            throw new AppObjectNotFoundException("Vehicle", "Vehicle with id: " + id + " not found.");
+        }
+
+        Vehicle vehicle = vehicleRepository.findById(id).get();
+        VehicleReadOnlyDTO vehicleToReturn = vehicleMapper.mapToVehicleReadOnlyDTO(vehicle);
+        return vehicleToReturn;
+    }
 
     public Page<VehicleReadOnlyDTO> getPaginatedVehicles(int page, int size) {
 

@@ -76,6 +76,7 @@ public class ServiceRecordRestController {
 
         return new ResponseEntity<>(serviceRecordReadOnlyDTO, HttpStatus.OK);
     }
+    
     @PostMapping("/seviceRecords/all")
     public ResponseEntity<List<ServiceRecordReadOnlyDTO>> getServiceRecords(@Nullable @RequestBody ServiceRecordFilters filters, Principal principal)
             throws AppObjectNotFoundException, AppObjectNotAuthorizedException {
