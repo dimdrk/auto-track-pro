@@ -3,8 +3,8 @@ package gr.dimitriosdrakopoulos.projects.auto_track_pro.rest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.AdminService;
@@ -32,25 +32,25 @@ public class RegisterRestController {
     private final OwnerSerive ownerSerive;
     private final DriverService driverService;
     
-    @PostMapping("/admins/save")
+    @PostMapping("/admin/save")
     public ResponseEntity<AdminReadOnlyDTO> saveAdmin(
-            @Valid @RequestPart(name = "admin") AdminInsertDTO adminInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
+            @Valid @RequestBody AdminInsertDTO adminInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
 
         AdminReadOnlyDTO adminReadOnlyDTO = adminService.saveAdmin(adminInsertDTO);
         return new ResponseEntity<>(adminReadOnlyDTO, HttpStatus.OK);
     }
 
-    @PostMapping("owners/save")
+    @PostMapping("owner/save")
     public ResponseEntity<OwnerReadOnlyDTO> saveOwner(
-            @Valid @RequestPart(name = "owner") OwnerInsertDTO ownerInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
+            @Valid @RequestBody OwnerInsertDTO ownerInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
 
         OwnerReadOnlyDTO ownerReadOnlyDTO = ownerSerive.saveOwner(ownerInsertDTO);
         return new ResponseEntity<>(ownerReadOnlyDTO, HttpStatus.OK);
     }
 
-    @PostMapping("drivers/save")
+    @PostMapping("driver/save")
     public ResponseEntity<DriverReadOnlyDTO> saveDriver(
-            @Valid @RequestPart(name = "driver") DriverInsertDTO driverrInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
+            @Valid @RequestBody DriverInsertDTO driverrInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
 
         DriverReadOnlyDTO driverReadOnlyDTO = driverService.saveDriver(driverrInsertDTO);
         return new ResponseEntity<>(driverReadOnlyDTO, HttpStatus.OK);
