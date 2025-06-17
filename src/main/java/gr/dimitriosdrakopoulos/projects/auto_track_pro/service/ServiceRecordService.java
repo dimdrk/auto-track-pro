@@ -60,6 +60,18 @@ public class ServiceRecordService {
 
         serviceRecordRepository.deleteById(id);
     }
+    
+    // Check if usefull
+    public ServiceRecordReadOnlyDTO getServiceRecordById(Long id) throws AppObjectNotFoundException {
+
+        if (serviceRecordRepository.findById(id).isEmpty()) {
+            throw new AppObjectNotFoundException("ServiceRecord", "Service record with id: " + id + " not found.");
+        }
+
+        ServiceRecord serviceRecord = serviceRecordRepository.findById(id).get();
+        ServiceRecordReadOnlyDTO ServiceRecordToReturn = serviceRecordMapper.mapServiceRecordReadOnlyDTO(serviceRecord);
+        return ServiceRecordToReturn;
+    }
 
     public Page<ServiceRecordReadOnlyDTO> getPaginatedServiceRecord(int page, int size) {
 
