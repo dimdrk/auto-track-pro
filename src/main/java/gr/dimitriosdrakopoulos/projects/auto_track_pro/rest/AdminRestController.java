@@ -1,18 +1,15 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.rest;
 
-
-
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.*;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.AdminFilters;
-// import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminReadOnlyDTO;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.AdminService;
-// import jakarta.validation.Valid;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -29,23 +26,6 @@ public class AdminRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminRestController.class);
     private final AdminService adminService;
 
-    // TODO
-    @GetMapping("/admins")
-    public ResponseEntity<Page<AdminReadOnlyDTO>> getAllAdmins(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Page<AdminReadOnlyDTO> adminsPage = adminService.getPaginatedAdmins(page, size);
-        return new ResponseEntity<>(adminsPage, HttpStatus.OK);
-    }
-
-    // @PostMapping("/admins/save")
-    // public ResponseEntity<AdminReadOnlyDTO> saveAdmin(
-    //         @Valid @RequestPart(name = "admin") AdminInsertDTO adminInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
-
-    //     AdminReadOnlyDTO adminReadOnlyDTO = adminService.saveAdmin(adminInsertDTO);
-    //     return new ResponseEntity<>(adminReadOnlyDTO, HttpStatus.OK);
-    // }
 
     @PostMapping("/admins/all")
     public ResponseEntity<List<AdminReadOnlyDTO>> getAdmins(@Nullable @RequestBody AdminFilters filters, Principal principal)
@@ -69,5 +49,24 @@ public class AdminRestController {
             LOGGER.error("ERROR: Could not get admins.", e);
             throw e;
         }
+    }
+
+    @PatchMapping("/admins/update/{id}")
+    public ResponseEntity<AdminReadOnlyDTO> updateAdmin(
+            @RequestParam(name = "id") Long id,
+            @Valid @RequestBody AdminUpdateDTO adminUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
+
+        AdminReadOnlyDTO adminReadOnlyDTO = adminService.updateAdmin(id, adminUpdateDTO);
+        return new ResponseEntity<>(adminReadOnlyDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/admins/delete/")
+    public ResponseEntity<AdminReadOnlyDTO> deleteAdmin(
+                @RequestParam(name = "id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
+        
+                    AdminReadOnlyDTO adminReadOnlyDTO = adminService.getAdminById(id);
+                    adminService.deleteAdmin(id);
+
+        return new ResponseEntity<>(adminReadOnlyDTO, HttpStatus.OK);
     }
 }
