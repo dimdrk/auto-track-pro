@@ -1,7 +1,7 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.security;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.authentication.JwtAuthenticationFilter;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Role;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,6 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final UserDetailsService userDetailsService;
 
-// TODO - needs edits
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
@@ -45,11 +44,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/api/auth/authenticate").permitAll()
                         .requestMatchers("/api/register").permitAll()
-                        .requestMatchers("/api/vehicles/**").hasAnyAuthority(Role.SUPER_ADMIN.name(), Role.OWNER.name(), Role.DRIVER.name())
-                        .requestMatchers("/api/serviceRecords/**").hasAnyAuthority(Role.SUPER_ADMIN.name(), Role.OWNER.name(), Role.DRIVER.name())
-                        .requestMatchers("/api/drivers/**").hasAnyAuthority(Role.SUPER_ADMIN.name(), Role.OWNER.name(), Role.DRIVER.name())
-                        .requestMatchers("/api/owners/**").hasAnyAuthority(Role.SUPER_ADMIN.name() ,Role.OWNER.name())
-                        .requestMatchers("/api/admins/**").hasAnyAuthority(Role.SUPER_ADMIN.name())
+                        .requestMatchers("/api/vehicles/**").hasAnyAuthority(RoleType.SUPER_ADMIN.name(), RoleType.OWNER.name(), RoleType.DRIVER.name())
+                        .requestMatchers("/api/serviceRecords/**").hasAnyAuthority(RoleType.SUPER_ADMIN.name(), RoleType.OWNER.name(), RoleType.DRIVER.name())
+                        .requestMatchers("/api/drivers/**").hasAnyAuthority(RoleType.SUPER_ADMIN.name(), RoleType.OWNER.name(), RoleType.DRIVER.name())
+                        .requestMatchers("/api/owners/**").hasAnyAuthority(RoleType.SUPER_ADMIN.name() ,RoleType.OWNER.name())
+                        .requestMatchers("/api/admins/**").hasAnyAuthority(RoleType.SUPER_ADMIN.name())
                         .requestMatchers("/**").permitAll()
                 )
                 .sessionManagement((session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)))
@@ -63,8 +62,7 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("https://coding-factory.apps.gov.gr", "https://test-coding-factory.apps.gov.gr",
-                "http://localhost:4200", "http://localhost:5173"));
+        corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:5173"));
         corsConfiguration.setAllowedMethods(List.of("*"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);

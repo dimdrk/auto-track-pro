@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectInvalidArgumentException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.DriverFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
@@ -33,7 +34,7 @@ public class DriverService {
     private final UserRepository userRepository;
 
     @Transactional(rollbackOn = Exception.class)
-    public DriverReadOnlyDTO saveDriver(DriverInsertDTO driverInsertDTO) throws AppObjectAlreadyExists {
+    public DriverReadOnlyDTO saveDriver(DriverInsertDTO driverInsertDTO) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException {
 
         if (userRepository.findByUsername(driverInsertDTO.getUser().getUsername()).isPresent()) {
             throw new AppObjectAlreadyExists("User", "User with username: " + driverInsertDTO.getUser().getUsername() + " already exist.");
@@ -47,13 +48,16 @@ public class DriverService {
             throw new AppObjectAlreadyExists("Driver", "Driver with driver licence: " + driverInsertDTO.getDriverLicence() + " already exist.");
         }
 
+        if (driverInsertDTO.getUser().getRole().toString() != "DRIVER") {
+            throw new AppObjectInvalidArgumentException("User", "User with role: " + driverInsertDTO.getUser().getRole() + " is valid.");
+        }
+
         Driver driver = driverMapper.mapToDriverEntity(driverInsertDTO);
-
         Driver savedDriver = driverRepository.save(driver);
-
         return driverMapper.mapToDriverReadOnlyDTO(savedDriver);
     }
 
+    // ToDo
     @Transactional(rollbackOn = Exception.class)
     public DriverReadOnlyDTO updateDriver(Long id, DriverUpdateDTO driverUpdateDTO) throws AppObjectNotFoundException {
         
@@ -62,9 +66,7 @@ public class DriverService {
         }
         
         Driver driver = driverMapper.mapToDriverUpdateDTO(driverUpdateDTO);
-
         Driver updatedDriver = driverRepository.save(driver);
-
         return driverMapper.mapToDriverReadOnlyDTO(updatedDriver);
     }
 

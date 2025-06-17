@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectInvalidArgumentException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.OwnerFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
@@ -33,7 +34,7 @@ public class OwnerSerive {
     private final UserRepository userRepository;
 
     @Transactional(rollbackOn = Exception.class)
-    public OwnerReadOnlyDTO saveOwner(OwnerInsertDTO ownerInsertDTO) throws AppObjectAlreadyExists {
+    public OwnerReadOnlyDTO saveOwner(OwnerInsertDTO ownerInsertDTO) throws AppObjectAlreadyExists, AppObjectInvalidArgumentException {
 
         if (userRepository.findByUsername(ownerInsertDTO.getUser().getUsername()).isPresent()) {
             throw new AppObjectAlreadyExists("User", "User with username: " + ownerInsertDTO.getUser().getUsername() + " already exist.");
@@ -51,11 +52,16 @@ public class OwnerSerive {
             throw new AppObjectAlreadyExists("Owner", "Owner with identity number: " + ownerInsertDTO.getIdentityNumber() + " already exist.");
         }
 
+        if (ownerInsertDTO.getUser().getRole().toString() != "OWNER") {
+            throw new AppObjectInvalidArgumentException("User", "User with role: " + ownerInsertDTO.getUser().getRole() + " is valid.");
+        }
+
         Owner owner = ownerMapper.mapToOwnerEntity(ownerInsertDTO);
         Owner savedOwner = ownerRepository.save(owner);
         return ownerMapper.mapToOwnerReadOnlyDTO(savedOwner);
     }
 
+    // ToDo
     @Transactional(rollbackOn = Exception.class)
     public OwnerReadOnlyDTO updateOwner(Long id, OwnerUpdateDTO ownerUpdateDTO) throws AppObjectNotFoundException {
         
@@ -69,7 +75,7 @@ public class OwnerSerive {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public void deleteAdmin(Long id) throws AppObjectNotFoundException {
+    public void deleteOwner(Long id) throws AppObjectNotFoundException {
 
         if (ownerRepository.findById(id).isEmpty()) {
             throw new AppObjectNotFoundException("Owner", "Owner with id: " + id + " not found.");

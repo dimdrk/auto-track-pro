@@ -1,7 +1,5 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.service;
 
-
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,6 +21,7 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper.AdminMapper;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Admin;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.User;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.AdminRepository;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -57,11 +56,16 @@ public class AdminService {
             throw new AppObjectAlreadyExists("Admin", "Admin with identity number: " + adminInsertDTO.getIdentityNumber() + " already exist.");
         }
 
+        if (adminInsertDTO.getUser().getRole().toString() != "SUPER_ADMIN") {
+            throw new AppObjectInvalidArgumentException("User", "User with role: " + adminInsertDTO.getUser().getRole() + " is valid.");
+        }
+
         Admin admin = adminMapper.mapToAdminEntity(adminInsertDTO);
         Admin savedAdmin = adminRepository.save(admin);
         return adminMapper.mapToAdminReadOnlyDTO(savedAdmin);        
     }
 
+    // ToDo
     @Transactional(rollbackOn = Exception.class)
     public AdminReadOnlyDTO updateAdmin(Long id, AdminUpdateDTO adminUpdateDTO) throws AppObjectNotFoundException {
         
@@ -69,7 +73,19 @@ public class AdminService {
             throw new AppObjectNotFoundException("Admin", "Admin with id: " + id + " not found.");
         }
         
-        Admin admin = adminMapper.mapToAdminUpdateDTO(adminUpdateDTO);
+        Admin admin = adminRepository.findById(id).get();
+        admin.setIsActive(getAdminById(id).getIsActive());
+        admin.setDriverLicence(getAdminById(id).getDriverLicence());
+        admin.setLicenceExpiration(getAdminById(id).getLicenceExpiration());
+        admin.setLicenceCategory(getAdminById(id).getLicenceCategory());
+        admin.setIdentityNumber(getAdminById(id).getIdentityNumber());
+        admin.setCity(getAdminById(id).getCity());
+        
+        User user = admin.getUser();
+        admin.setUser(user);
+
+        //Admin admin = adminMapper.mapToAdminUpdateDTO(adminUpdateDTO);
+
         Admin updatedAdmin = adminRepository.save(admin);
         return adminMapper.mapToAdminReadOnlyDTO(updatedAdmin);
     }
@@ -82,6 +98,18 @@ public class AdminService {
         }
 
         adminRepository.deleteById(id);
+    }
+
+    // Check if usefull
+    public AdminReadOnlyDTO getAdminById(Long id) throws AppObjectNotFoundException {
+
+        if (userRepository.findById(id).isEmpty()) {
+            throw new AppObjectNotFoundException("Admin", "Admin with id: " + id + " not found.");
+        }
+
+        Admin admin = adminRepository.findById(id).get();
+        AdminReadOnlyDTO adminToReturn = adminMapper.mapToAdminReadOnlyDTO(admin);
+        return adminToReturn;
     }
 
     public Page<AdminReadOnlyDTO> getPaginatedAdmins(int page, int size) {
