@@ -16,7 +16,6 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.VehicleFilte
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.VehicleSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper.VehicleMapper;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Vehicle;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.VehicleRepository;
@@ -47,13 +46,13 @@ public class VehicleService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public VehicleReadOnlyDTO updateVehicle(Long id, VehicleUpdateDTO vehicleUpdateDTO) throws  AppObjectNotFoundException {
+    public VehicleReadOnlyDTO updateVehicle(Long id, VehicleInsertDTO vehicleUpdateDTO) throws  AppObjectNotFoundException {
         
         if (vehicleRepository.findById(id).isPresent()) {
             throw new AppObjectNotFoundException("Vehicle", "Vehicle with id: " + id + " not found.");
         }
 
-        Vehicle vehicle = vehicleMapper.mapToVehicleUpdateDTO(vehicleUpdateDTO);
+        Vehicle vehicle = vehicleMapper.mapToVehicleEntity(vehicleUpdateDTO);
         Vehicle updatedVehicle = vehicleRepository.save(vehicle);
         return vehicleMapper.mapToVehicleReadOnlyDTO(updatedVehicle);
     }

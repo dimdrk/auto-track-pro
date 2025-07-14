@@ -17,7 +17,6 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.DriverSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper.DriverMapper;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Driver;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.User;
@@ -60,7 +59,7 @@ public class DriverService {
 
     // Done
     @Transactional(rollbackOn = Exception.class)
-    public DriverReadOnlyDTO updateDriver(Long id, DriverUpdateDTO driverUpdateDTO) throws AppObjectNotFoundException {
+    public DriverReadOnlyDTO updateDriver(Long id, DriverInsertDTO driverUpdateDTO) throws AppObjectNotFoundException {
         
         if (userRepository.findById(id).isEmpty()) {
             throw new AppObjectNotFoundException("Driver", "Driver with id: " + id + " not found.");

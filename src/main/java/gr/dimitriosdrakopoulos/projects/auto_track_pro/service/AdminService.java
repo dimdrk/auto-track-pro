@@ -3,6 +3,7 @@ package gr.dimitriosdrakopoulos.projects.auto_track_pro.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -18,7 +19,6 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.AdminSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper.AdminMapper;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Admin;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.User;
@@ -34,6 +34,7 @@ public class AdminService {
     private final AdminMapper adminMapper;
     private final AdminRepository adminRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     
     @Transactional(rollbackOn = Exception.class)
@@ -67,28 +68,28 @@ public class AdminService {
 
     // Working
     @Transactional(rollbackOn = Exception.class)
-    public AdminReadOnlyDTO updateAdmin(Long id, AdminUpdateDTO adminUpdateDTO) throws AppObjectNotFoundException {
+    public AdminReadOnlyDTO updateAdmin(Long id, AdminInsertDTO adminInsertDTO) throws AppObjectNotFoundException {
         
         if (userRepository.findById(id).isEmpty()) {
             throw new AppObjectNotFoundException("Admin", "Admin with id: " + id + " not found.");
         }
         
         Admin admin = adminRepository.findById(id).orElseThrow();
-        admin.setIsActive(adminUpdateDTO.getIsActive());
-        admin.setDriverLicence(adminUpdateDTO.getDriverLicence());
-        admin.setLicenceExpiration(adminUpdateDTO.getLicenceExpiration());
-        admin.setLicenceCategory(adminUpdateDTO.getLicenceCategory());
-        admin.setIdentityNumber(adminUpdateDTO.getIdentityNumber());
-        admin.setCity(adminUpdateDTO.getCity());
+        admin.setIsActive(adminInsertDTO.getIsActive());
+        admin.setDriverLicence(adminInsertDTO.getDriverLicence());
+        admin.setLicenceExpiration(adminInsertDTO.getLicenceExpiration());
+        admin.setLicenceCategory(adminInsertDTO.getLicenceCategory());
+        admin.setIdentityNumber(adminInsertDTO.getIdentityNumber());
+        admin.setCity(adminInsertDTO.getCity());
         
         User user = admin.getUser();
-        user.setUsername(adminUpdateDTO.getUser().getUsername());
-        user.setPassword(adminUpdateDTO.getUser().getPassword());
-        user.setFirstname(adminUpdateDTO.getUser().getFirstname());
-        user.setLastname(adminUpdateDTO.getUser().getLastname());
-        user.setEmail(adminUpdateDTO.getUser().getEmail());
-        user.setGender(adminUpdateDTO.getUser().getGender());
-        user.setIsActive(adminUpdateDTO.getUser().getIsActive());
+        user.setUsername(adminInsertDTO.getUser().getUsername());
+        user.setPassword(passwordEncoder.encode(adminInsertDTO.getUser().getPassword()));
+        user.setFirstname(adminInsertDTO.getUser().getFirstname());
+        user.setLastname(adminInsertDTO.getUser().getLastname());
+        user.setEmail(adminInsertDTO.getUser().getEmail());
+        user.setGender(adminInsertDTO.getUser().getGender());
+        user.setIsActive(adminInsertDTO.getUser().getIsActive());
         admin.setUser(user);
 
         Admin updatedAdmin = adminRepository.save(admin);

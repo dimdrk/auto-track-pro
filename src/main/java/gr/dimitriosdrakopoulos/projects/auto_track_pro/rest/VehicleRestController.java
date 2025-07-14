@@ -28,7 +28,6 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.VehicleFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.VehicleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +60,7 @@ public class VehicleRestController {
     @PatchMapping("/vehicles/update/{id}")
     public ResponseEntity<VehicleReadOnlyDTO> updateVehicle(
             @RequestParam(name = "id") Long id,
-            @Valid @RequestBody VehicleUpdateDTO vehicleUpdateDTO) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
+            @Valid @RequestBody VehicleInsertDTO vehicleUpdateDTO) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
 
                 VehicleReadOnlyDTO vehicleReadOnlyDTO = vehicleService.updateVehicle(id, vehicleUpdateDTO);
         return new ResponseEntity<>(vehicleReadOnlyDTO, HttpStatus.OK);

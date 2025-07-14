@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Admin;
 import lombok.RequiredArgsConstructor;
 
@@ -40,20 +39,5 @@ public class AdminMapper {
         admin.setUser(userMapper.mapToUserEntity(adminInsertDTO.getUser()));
 
         return admin;
-    }
-
-    public Admin mapToAdminUpdateDTO(AdminUpdateDTO adminUpdateDTO) {
-        Admin admin = new Admin();
-
-        admin.setIsActive(adminUpdateDTO.getIsActive());
-        admin.setDriverLicence(adminUpdateDTO.getDriverLicence());
-        admin.setLicenceExpiration(adminUpdateDTO.getLicenceExpiration());
-        admin.setLicenceCategory(adminUpdateDTO.getLicenceCategory());
-        admin.setIdentityNumber(adminUpdateDTO.getIdentityNumber());
-        admin.setCity(adminUpdateDTO.getCity());
-        admin.setUser(userMapper.mapToUserUpdateDTO(adminUpdateDTO.getUser()));
-
-        return admin;
-    }
-    
+    }    
 }

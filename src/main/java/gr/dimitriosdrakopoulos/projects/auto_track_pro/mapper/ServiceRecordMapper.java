@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.ServiceRecord;
 import lombok.RequiredArgsConstructor;
 
@@ -40,22 +39,6 @@ public class ServiceRecordMapper {
         serviceRecord.setNextService(serviceRecordInsertDTO.getNextService());
         serviceRecord.setRecommentdations(serviceRecordInsertDTO.getRecommentdations());
         serviceRecord.setWarranty(serviceRecordInsertDTO.getWarranty());
-
-        return serviceRecord;
-    }
-
-    public ServiceRecord mapToServiceRecordUpdateDTO(ServiceRecordUpdateDTO serviceRecordUpdateDTO) {
-        ServiceRecord serviceRecord = new ServiceRecord();
-
-        serviceRecord.setDateOfService(serviceRecordUpdateDTO.getDateOfService());
-        serviceRecord.setServiceType(serviceRecordUpdateDTO.getServiceType());
-        serviceRecord.setDescription(serviceRecordUpdateDTO.getDescription());
-        serviceRecord.setOdometer(serviceRecordUpdateDTO.getOdometer());
-        serviceRecord.setParts(serviceRecordUpdateDTO.getParts());
-        serviceRecord.setCost(serviceRecordUpdateDTO.getCost());
-        serviceRecord.setNextService(serviceRecordUpdateDTO.getNextService());
-        serviceRecord.setRecommentdations(serviceRecordUpdateDTO.getRecommentdations());
-        serviceRecord.setWarranty(serviceRecordUpdateDTO.getWarranty());
 
         return serviceRecord;
     }

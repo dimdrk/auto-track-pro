@@ -28,7 +28,6 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.ServiceRecordFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.ServiceRecordService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +60,7 @@ public class ServiceRecordRestController {
     @PatchMapping("/serviceRecords/update/{id}")
     public ResponseEntity<ServiceRecordReadOnlyDTO> updateServiceRecord(
             @RequestParam(name = "id") Long id,
-            @Valid @RequestBody ServiceRecordUpdateDTO serviceRecordUpdateDTO) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
+            @Valid @RequestBody ServiceRecordInsertDTO serviceRecordUpdateDTO) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
 
                 ServiceRecordReadOnlyDTO serviceRecordReadOnlyDTO = serviceRecordService.updateServiceRecord(id, serviceRecordUpdateDTO);
         return new ResponseEntity<>(serviceRecordReadOnlyDTO, HttpStatus.OK);

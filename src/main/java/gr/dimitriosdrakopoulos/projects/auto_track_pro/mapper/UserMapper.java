@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.UserInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.UserReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.UserUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.User;
 import lombok.RequiredArgsConstructor;
 
@@ -39,20 +38,6 @@ public class UserMapper {
         user.setRoleType(userInsertDTO.getRole());
         user.setIsActive(userInsertDTO.getIsActive());
 
-        return user;
-    }
-
-    public User mapToUserUpdateDTO(UserUpdateDTO userUpdateDTO) {
-        User user = new User();
-
-        user.setUsername(userUpdateDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(userUpdateDTO.getPassword()));
-        user.setFirstname(userUpdateDTO.getFirstname());
-        user.setLastname(userUpdateDTO.getLastname());
-        user.setEmail(userUpdateDTO.getEmail());
-        user.setGender(userUpdateDTO.getGender());
-        user.setIsActive(userUpdateDTO.getIsActive());
-        
         return user;
     }
 }

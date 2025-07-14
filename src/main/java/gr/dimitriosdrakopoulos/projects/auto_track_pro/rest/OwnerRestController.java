@@ -24,8 +24,8 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObject
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppServerException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.OwnerFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.OwnerSerive;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -74,7 +74,7 @@ public class OwnerRestController {
     @PatchMapping("/owners/update")
     public ResponseEntity<OwnerReadOnlyDTO> updateOwner(
             @RequestParam(name = "id") Long id,
-            @Valid @RequestBody OwnerUpdateDTO ownerUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
+            @Valid @RequestBody OwnerInsertDTO ownerUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
 
         OwnerReadOnlyDTO ownerReadOnlyDTO = ownerSerive.updateOwner(id, ownerUpdateDTO);
         return new ResponseEntity<>(ownerReadOnlyDTO, HttpStatus.OK);

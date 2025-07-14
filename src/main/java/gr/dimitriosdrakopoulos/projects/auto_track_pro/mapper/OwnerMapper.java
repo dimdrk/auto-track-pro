@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Owner;
 import lombok.RequiredArgsConstructor;
 
@@ -37,19 +36,6 @@ public class OwnerMapper {
         owner.setIdentityNumber(ownerInsertDTO.getIdentityNumber());
         owner.setCity(ownerInsertDTO.getCity());
         owner.setUser(userMapper.mapToUserEntity(ownerInsertDTO.getUser()));
-
-        return owner;
-    }
-    
-    public Owner mapToOwnerUpdateDTO(OwnerUpdateDTO ownerUpdateDTO) {
-        Owner owner = new Owner();
-
-        owner.setDriverLicence(ownerUpdateDTO.getDriverLicence());
-        owner.setLicenceExpiration(ownerUpdateDTO.getLicenceExpiration());
-        owner.setLicenceCategory(ownerUpdateDTO.getLicenceCategory());
-        owner.setIdentityNumber(ownerUpdateDTO.getIdentityNumber());
-        owner.setCity(ownerUpdateDTO.getCity());
-        owner.setUser(userMapper.mapToUserUpdateDTO(ownerUpdateDTO.getUser()));
 
         return owner;
     }

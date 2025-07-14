@@ -16,7 +16,6 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.ServiceRecor
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.ServiceRecordSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.ServiceRecordUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper.ServiceRecordMapper;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.ServiceRecord;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.ServiceRecordRepository;
@@ -41,13 +40,13 @@ public class ServiceRecordService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public ServiceRecordReadOnlyDTO updateServiceRecord(Long id, ServiceRecordUpdateDTO serviceRecordUpdateDTO) throws  AppObjectNotFoundException {
+    public ServiceRecordReadOnlyDTO updateServiceRecord(Long id, ServiceRecordInsertDTO serviceRecordUpdateDTO) throws  AppObjectNotFoundException {
         
         if (serviceRecordRepository.findById(id).isPresent()) {
             throw new AppObjectNotFoundException("ServiceRecord", "Service record with id: " + id + " not found.");
         }
 
-        ServiceRecord serviceRecord = serviceRecordMapper.mapToServiceRecordUpdateDTO(serviceRecordUpdateDTO);
+        ServiceRecord serviceRecord = serviceRecordMapper.mapToServiceRecordEntity(serviceRecordUpdateDTO);
         ServiceRecord updatedServiceRecord = serviceRecordRepository.save(serviceRecord);
         return serviceRecordMapper.mapServiceRecordReadOnlyDTO(updatedServiceRecord);
     }

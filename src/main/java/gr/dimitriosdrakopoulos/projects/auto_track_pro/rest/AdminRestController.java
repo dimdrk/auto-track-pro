@@ -3,8 +3,8 @@ package gr.dimitriosdrakopoulos.projects.auto_track_pro.rest;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.*;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.AdminFilters;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.AdminUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.AdminService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +54,7 @@ public class AdminRestController {
     @PatchMapping("/admins/update")
     public ResponseEntity<AdminReadOnlyDTO> updateAdmin(
             @RequestParam(name = "id") Long id,
-            @Valid @RequestBody AdminUpdateDTO adminUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
+            @Valid @RequestBody AdminInsertDTO adminUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
 
         AdminReadOnlyDTO adminReadOnlyDTO = adminService.updateAdmin(id, adminUpdateDTO);
         return new ResponseEntity<>(adminReadOnlyDTO, HttpStatus.OK);

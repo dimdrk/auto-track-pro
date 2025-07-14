@@ -17,7 +17,6 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.specifications.OwnerSpecification;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper.OwnerMapper;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Owner;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.User;
@@ -64,7 +63,7 @@ public class OwnerSerive {
 
     // ToDo
     @Transactional(rollbackOn = Exception.class)
-    public OwnerReadOnlyDTO updateOwner(Long id, OwnerUpdateDTO ownerUpdateDTO) throws AppObjectNotFoundException {
+    public OwnerReadOnlyDTO updateOwner(Long id, OwnerInsertDTO ownerUpdateDTO) throws AppObjectNotFoundException {
         
         if (userRepository.findById(id).isEmpty()) {
             throw new AppObjectNotFoundException("Owner", "Owner with id: " + id + " not found.");

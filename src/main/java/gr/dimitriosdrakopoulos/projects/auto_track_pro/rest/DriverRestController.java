@@ -24,8 +24,8 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObject
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppServerException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.DriverFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.DriverService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +75,7 @@ public class DriverRestController {
     @PatchMapping("/drivers/update")
     public ResponseEntity<DriverReadOnlyDTO> updateDriver(
             @RequestParam(name = "id") Long id,
-            @Valid @RequestBody DriverUpdateDTO driverUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
+            @Valid @RequestBody DriverInsertDTO driverUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
 
         DriverReadOnlyDTO driverReadOnlyDTO = driverService.updateDriver(id, driverUpdateDTO);
         return new ResponseEntity<>(driverReadOnlyDTO, HttpStatus.OK);

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleReadOnlyDTO;
-import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Vehicle;
 import lombok.RequiredArgsConstructor;
 
@@ -45,22 +44,4 @@ public class VehicleMapper {
 
         return vehicle;
     }
-
-    public Vehicle mapToVehicleUpdateDTO(VehicleUpdateDTO vehicleUpdateDTO) {
-        Vehicle vehicle = new Vehicle();
-
-        vehicle.setVin(vehicleUpdateDTO.getVin());
-        vehicle.setLicencePlate(vehicleUpdateDTO.getLicencePlate());
-        vehicle.setMake(vehicleUpdateDTO.getMake());
-        vehicle.setModel(vehicleUpdateDTO.getModel());
-        vehicle.setType(vehicleUpdateDTO.getType());
-        vehicle.setColor(vehicleUpdateDTO.getColor());
-        vehicle.setProductionDate(vehicleUpdateDTO.getProductionDate());
-        vehicle.setFuel(vehicleUpdateDTO.getFuel());
-        vehicle.setGearbox(vehicleUpdateDTO.getGearbox());
-        vehicle.setOdometer(vehicleUpdateDTO.getOdometer());
-
-        return vehicle;
-    }
-
 }
