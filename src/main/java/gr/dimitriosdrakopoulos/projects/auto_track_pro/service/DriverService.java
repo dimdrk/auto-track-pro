@@ -20,6 +20,7 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper.DriverMapper;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Driver;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.User;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.DriverRepository;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -57,7 +58,7 @@ public class DriverService {
         return driverMapper.mapToDriverReadOnlyDTO(savedDriver);
     }
 
-    // ToDo
+    // Done
     @Transactional(rollbackOn = Exception.class)
     public DriverReadOnlyDTO updateDriver(Long id, DriverUpdateDTO driverUpdateDTO) throws AppObjectNotFoundException {
         
@@ -65,7 +66,20 @@ public class DriverService {
             throw new AppObjectNotFoundException("Driver", "Driver with id: " + id + " not found.");
         }
         
-        Driver driver = driverMapper.mapToDriverUpdateDTO(driverUpdateDTO);
+        Driver driver = driverRepository.findById(id).orElseThrow();
+        driver.setLicenceExpiration(driverUpdateDTO.getLicenceExpiration());
+        driver.setLicenceCategory(driverUpdateDTO.getLicenceCategory());
+
+        User user = driver.getUser();
+        user.setUsername(driverUpdateDTO.getUser().getUsername());
+        user.setPassword(driverUpdateDTO.getUser().getPassword());
+        user.setFirstname(driverUpdateDTO.getUser().getFirstname());
+        user.setLastname(driverUpdateDTO.getUser().getLastname());
+        user.setEmail(driverUpdateDTO.getUser().getEmail());
+        user.setGender(driverUpdateDTO.getUser().getGender());
+        user.setIsActive(driverUpdateDTO.getUser().getIsActive());
+        driver.setUser(user);
+
         Driver updatedDriver = driverRepository.save(driver);
         return driverMapper.mapToDriverReadOnlyDTO(updatedDriver);
     }
@@ -78,6 +92,18 @@ public class DriverService {
         }
 
         driverRepository.deleteById(id);
+    }
+
+    // Usefull for delete
+    public DriverReadOnlyDTO getDriverById(Long id) throws AppObjectNotFoundException {
+
+        if (userRepository.findById(id).isEmpty()) {
+            throw new AppObjectNotFoundException("Driver", "Driver with id: " + id + " not found.");
+        }
+
+        Driver driver = driverRepository.findById(id).get();
+        DriverReadOnlyDTO driverToReturn = driverMapper.mapToDriverReadOnlyDTO(driver);
+        return driverToReturn;
     }
 
     public Page<DriverReadOnlyDTO> getPaginatedDrivers(int page, int size) {

@@ -20,6 +20,7 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.mapper.OwnerMapper;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Owner;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.User;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.OwnerRepository;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -69,7 +70,23 @@ public class OwnerSerive {
             throw new AppObjectNotFoundException("Owner", "Owner with id: " + id + " not found.");
         }
         
-        Owner owner = ownerMapper.mapToOwnerUpdateDTO(ownerUpdateDTO);
+        Owner owner = ownerRepository.findById(id).orElseThrow();
+        owner.setDriverLicence(ownerUpdateDTO.getDriverLicence());
+        owner.setLicenceExpiration(ownerUpdateDTO.getLicenceExpiration());
+        owner.setLicenceCategory(ownerUpdateDTO.getLicenceCategory());
+        owner.setIdentityNumber(ownerUpdateDTO.getIdentityNumber());
+        owner.setCity(ownerUpdateDTO.getCity());
+
+        User user = owner.getUser();
+        user.setUsername(ownerUpdateDTO.getUser().getUsername());
+        user.setPassword(ownerUpdateDTO.getUser().getPassword());
+        user.setFirstname(ownerUpdateDTO.getUser().getFirstname());
+        user.setLastname(ownerUpdateDTO.getUser().getLastname());
+        user.setEmail(ownerUpdateDTO.getUser().getEmail());
+        user.setGender(ownerUpdateDTO.getUser().getGender());
+        user.setIsActive(ownerUpdateDTO.getUser().getIsActive());
+        owner.setUser(user);
+
         Owner updatedOwner = ownerRepository.save(owner);
         return ownerMapper.mapToOwnerReadOnlyDTO(updatedOwner);
     }
@@ -82,6 +99,18 @@ public class OwnerSerive {
         }
 
         ownerRepository.deleteById(id);
+    }
+
+    // Usefull for delete
+    public OwnerReadOnlyDTO getOwnerById(Long id) throws AppObjectNotFoundException {
+
+        if (userRepository.findById(id).isEmpty()) {
+            throw new AppObjectNotFoundException("Owner", "Owner with id: " + id + " not found.");
+        }
+
+        Owner owner = ownerRepository.findById(id).get();
+        OwnerReadOnlyDTO ownerToReturn = ownerMapper.mapToOwnerReadOnlyDTO(owner);
+        return ownerToReturn;
     }
 
     public Page<OwnerReadOnlyDTO> getPaginatedOwners(int page, int size) {
