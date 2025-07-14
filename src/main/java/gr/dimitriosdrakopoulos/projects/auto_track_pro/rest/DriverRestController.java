@@ -9,19 +9,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectInvalidArgumentException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotAuthorizedException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppServerException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.DriverFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverReadOnlyDTO;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.DriverUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.DriverService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -64,5 +70,24 @@ public class DriverRestController {
             LOGGER.error("ERROR: Could not get drivers.", e);
             throw e;
         }
+    }
+
+    @PatchMapping("/drivers/update")
+    public ResponseEntity<DriverReadOnlyDTO> updateDriver(
+            @RequestParam(name = "id") Long id,
+            @Valid @RequestBody DriverUpdateDTO driverUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
+
+        DriverReadOnlyDTO driverReadOnlyDTO = driverService.updateDriver(id, driverUpdateDTO);
+        return new ResponseEntity<>(driverReadOnlyDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/drivers/delete")
+    public ResponseEntity<DriverReadOnlyDTO> deleteDriver(
+                @RequestParam(name = "id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
+        
+                    DriverReadOnlyDTO driverReadOnlyDTO = driverService.getDriverById(id);
+                    driverService.deleteDriver(id);
+
+        return new ResponseEntity<>(driverReadOnlyDTO, HttpStatus.OK);
     }
 }

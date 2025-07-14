@@ -9,19 +9,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectInvalidArgumentException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotAuthorizedException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectNotFoundException;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppServerException;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.OwnerFilters;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.filters.Paginated;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerReadOnlyDTO;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.OwnerUpdateDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.service.OwnerSerive;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -63,5 +69,24 @@ public class OwnerRestController {
             LOGGER.error("ERROR: Could not get owners.", e);
             throw e;
         }
+    }
+
+    @PatchMapping("/owners/update")
+    public ResponseEntity<OwnerReadOnlyDTO> updateOwner(
+            @RequestParam(name = "id") Long id,
+            @Valid @RequestBody OwnerUpdateDTO ownerUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
+
+        OwnerReadOnlyDTO ownerReadOnlyDTO = ownerSerive.updateOwner(id, ownerUpdateDTO);
+        return new ResponseEntity<>(ownerReadOnlyDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/owners/delete")
+    public ResponseEntity<OwnerReadOnlyDTO> deleteOwner(
+                @RequestParam(name = "id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
+        
+                    OwnerReadOnlyDTO ownerReadOnlyDTO = ownerSerive.getOwnerById(id);
+                    ownerSerive.deleteOwner(id);
+
+        return new ResponseEntity<>(ownerReadOnlyDTO, HttpStatus.OK);
     }
 }
