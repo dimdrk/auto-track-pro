@@ -65,7 +65,7 @@ public class AdminService {
         return adminMapper.mapToAdminReadOnlyDTO(savedAdmin);        
     }
 
-    // ToDo
+    // Working
     @Transactional(rollbackOn = Exception.class)
     public AdminReadOnlyDTO updateAdmin(Long id, AdminUpdateDTO adminUpdateDTO) throws AppObjectNotFoundException {
         
@@ -73,18 +73,23 @@ public class AdminService {
             throw new AppObjectNotFoundException("Admin", "Admin with id: " + id + " not found.");
         }
         
-        Admin admin = adminRepository.findById(id).get();
-        admin.setIsActive(getAdminById(id).getIsActive());
-        admin.setDriverLicence(getAdminById(id).getDriverLicence());
-        admin.setLicenceExpiration(getAdminById(id).getLicenceExpiration());
-        admin.setLicenceCategory(getAdminById(id).getLicenceCategory());
-        admin.setIdentityNumber(getAdminById(id).getIdentityNumber());
-        admin.setCity(getAdminById(id).getCity());
+        Admin admin = adminRepository.findById(id).orElseThrow();
+        admin.setIsActive(adminUpdateDTO.getIsActive());
+        admin.setDriverLicence(adminUpdateDTO.getDriverLicence());
+        admin.setLicenceExpiration(adminUpdateDTO.getLicenceExpiration());
+        admin.setLicenceCategory(adminUpdateDTO.getLicenceCategory());
+        admin.setIdentityNumber(adminUpdateDTO.getIdentityNumber());
+        admin.setCity(adminUpdateDTO.getCity());
         
         User user = admin.getUser();
+        user.setUsername(adminUpdateDTO.getUser().getUsername());
+        user.setPassword(adminUpdateDTO.getUser().getPassword());
+        user.setFirstname(adminUpdateDTO.getUser().getFirstname());
+        user.setLastname(adminUpdateDTO.getUser().getLastname());
+        user.setEmail(adminUpdateDTO.getUser().getEmail());
+        user.setGender(adminUpdateDTO.getUser().getGender());
+        user.setIsActive(adminUpdateDTO.getUser().getIsActive());
         admin.setUser(user);
-
-        //Admin admin = adminMapper.mapToAdminUpdateDTO(adminUpdateDTO);
 
         Admin updatedAdmin = adminRepository.save(admin);
         return adminMapper.mapToAdminReadOnlyDTO(updatedAdmin);
@@ -100,7 +105,7 @@ public class AdminService {
         adminRepository.deleteById(id);
     }
 
-    // Check if usefull
+    // Usefull for delete
     public AdminReadOnlyDTO getAdminById(Long id) throws AppObjectNotFoundException {
 
         if (userRepository.findById(id).isEmpty()) {
