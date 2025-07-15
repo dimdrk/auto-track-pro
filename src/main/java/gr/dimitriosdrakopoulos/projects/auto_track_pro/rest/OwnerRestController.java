@@ -71,7 +71,7 @@ public class OwnerRestController {
         }
     }
 
-    @PatchMapping("/owners/update")
+    @PatchMapping("/owner/update")
     public ResponseEntity<OwnerReadOnlyDTO> updateOwner(
             @RequestParam(name = "id") Long id,
             @Valid @RequestBody OwnerInsertDTO ownerUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
@@ -80,7 +80,7 @@ public class OwnerRestController {
         return new ResponseEntity<>(ownerReadOnlyDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/owners/delete")
+    @DeleteMapping("/owner/delete")
     public ResponseEntity<OwnerReadOnlyDTO> deleteOwner(
                 @RequestParam(name = "id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
         

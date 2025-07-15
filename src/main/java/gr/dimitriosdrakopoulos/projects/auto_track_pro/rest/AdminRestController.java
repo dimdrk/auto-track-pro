@@ -51,7 +51,7 @@ public class AdminRestController {
         }
     }
 
-    @PatchMapping("/admins/update")
+    @PatchMapping("/admin/update")
     public ResponseEntity<AdminReadOnlyDTO> updateAdmin(
             @RequestParam(name = "id") Long id,
             @Valid @RequestBody AdminInsertDTO adminUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
@@ -60,7 +60,7 @@ public class AdminRestController {
         return new ResponseEntity<>(adminReadOnlyDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/admins/delete")
+    @DeleteMapping("/admin/delete")
     public ResponseEntity<AdminReadOnlyDTO> deleteAdmin(
                 @RequestParam(name = "id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
         

@@ -72,7 +72,7 @@ public class DriverRestController {
         }
     }
 
-    @PatchMapping("/drivers/update")
+    @PatchMapping("/driver/update")
     public ResponseEntity<DriverReadOnlyDTO> updateDriver(
             @RequestParam(name = "id") Long id,
             @Valid @RequestBody DriverInsertDTO driverUpdateDTO ) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {        
@@ -81,7 +81,7 @@ public class DriverRestController {
         return new ResponseEntity<>(driverReadOnlyDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/drivers/delete")
+    @DeleteMapping("/driver/delete")
     public ResponseEntity<DriverReadOnlyDTO> deleteDriver(
                 @RequestParam(name = "id") Long id) throws AppObjectInvalidArgumentException, AppObjectNotFoundException, AppServerException {
         
