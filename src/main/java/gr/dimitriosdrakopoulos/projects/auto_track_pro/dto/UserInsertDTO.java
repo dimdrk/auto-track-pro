@@ -36,6 +36,10 @@ public class UserInsertDTO {
 
     @Email(message = "Invalid email.")
     private String email;
+    
+    @Pattern(regexp = "^(?=.*?[0-9]).{10,}$", message = "Invalid phone number.")
+    @NotEmpty(message = "Phone number must not be empty.")
+    private String phonenumber;
 
     @NotNull(message = "Gender must not be null.")
     private Gender gender;
