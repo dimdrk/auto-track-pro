@@ -40,6 +40,9 @@ public class User extends AbstractEntity implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    @Column(nullable = false, unique = true)
+    private String phonenumber;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
