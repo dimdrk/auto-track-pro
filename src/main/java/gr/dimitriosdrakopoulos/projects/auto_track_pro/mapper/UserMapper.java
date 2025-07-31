@@ -21,6 +21,7 @@ public class UserMapper {
         dto.setFirstname(user.getFirstname());
         dto.setLastname(user.getLastname());
         dto.setEmail(user.getEmail());
+        dto.setPhonenumber(user.getPhonenumber());
         dto.setIsActive(user.getIsActive());
 
         return dto;
@@ -34,6 +35,7 @@ public class UserMapper {
         user.setFirstname(userInsertDTO.getFirstname());
         user.setLastname(userInsertDTO.getLastname());
         user.setEmail(userInsertDTO.getEmail());
+        user.setPhonenumber(userInsertDTO.getPhonenumber());
         user.setGender(userInsertDTO.getGender());
         user.setRoleType(userInsertDTO.getRole());
         user.setIsActive(userInsertDTO.getIsActive());
