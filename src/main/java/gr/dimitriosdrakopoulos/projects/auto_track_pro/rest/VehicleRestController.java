@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.exceptions.AppObjectAlreadyExists;
@@ -51,7 +50,7 @@ public class VehicleRestController {
 
     @PostMapping("/vehicles/save")
     public ResponseEntity<VehicleReadOnlyDTO> saveVehicle(
-            @Valid @RequestPart(name = "vehicle") VehicleInsertDTO vehicleInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
+            @Valid @RequestBody VehicleInsertDTO vehicleInsertDTO) throws AppObjectInvalidArgumentException, AppObjectAlreadyExists, AppServerException {
 
         VehicleReadOnlyDTO vehicleReadOnlyDTO = vehicleService.saveVehicle(vehicleInsertDTO);
         return new ResponseEntity<>(vehicleReadOnlyDTO, HttpStatus.OK);

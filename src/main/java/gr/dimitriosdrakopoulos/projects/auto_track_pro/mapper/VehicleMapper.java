@@ -5,11 +5,16 @@ import org.springframework.stereotype.Component;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleInsertDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.dto.VehicleReadOnlyDTO;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.model.Vehicle;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.ServiceRecordRepository;
+import gr.dimitriosdrakopoulos.projects.auto_track_pro.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class VehicleMapper {
+
+    private final UserRepository userRepository;
+    private final ServiceRecordRepository serviceRecordRepository;
     
     public VehicleReadOnlyDTO mapToVehicleReadOnlyDTO(Vehicle vehicle) {
         var dto = new VehicleReadOnlyDTO();
@@ -41,7 +46,7 @@ public class VehicleMapper {
         vehicle.setFuel(vehicleInsertDTO.getFuel());
         vehicle.setGearbox(vehicleInsertDTO.getGearbox());
         vehicle.setOdometer(vehicleInsertDTO.getOdometer());
-
-        return vehicle;
+        
+        return vehicle;        
     }
 }

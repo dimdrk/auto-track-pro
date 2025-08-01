@@ -1,7 +1,9 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,4 +33,7 @@ public class OwnerInsertDTO {
 
     @NotNull(message = "User details must not be null.")
     private UserInsertDTO user;
+
+    @Nullable
+    private List<VehicleInsertDTO> vehicles;
 }

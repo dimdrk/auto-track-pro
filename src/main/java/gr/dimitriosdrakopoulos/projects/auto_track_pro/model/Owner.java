@@ -60,16 +60,26 @@ public class Owner extends AbstractEntity {
     private User user;
 
     @ManyToMany
-    @JoinTable(name = "owners_vehicles")
+    @JoinTable(
+        name = "owners_vehicles",
+        joinColumns = @JoinColumn(name = "owner_id"),
+        inverseJoinColumns = @JoinColumn(name = "vehicle_id"))
     private Set<Vehicle> ownerVehicles = new HashSet<>();
 
     public void addVehicle(Vehicle vehicle) {
         if (ownerVehicles == null) ownerVehicles = new HashSet<>();
         ownerVehicles.add(vehicle);
+        vehicle.getOwners().add(this);
+    }
+    
+
+    public void removeVehicle(Vehicle vehicle) {
+        ownerVehicles.remove(vehicle);
+        vehicle.getOwners().remove(this);
     }
 
-    public  boolean hasVehicles(Vehicle vehicle) {
-        return ownerVehicles != null && !ownerVehicles.isEmpty();
+    public  boolean hasVehicle(Vehicle vehicle) {
+        return ownerVehicles != null && !ownerVehicles.contains(vehicle);
     }
 
     @PrePersist

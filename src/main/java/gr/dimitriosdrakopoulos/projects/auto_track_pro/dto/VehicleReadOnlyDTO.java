@@ -1,6 +1,7 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.dto;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Color;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Fuel;
@@ -27,4 +28,7 @@ public class VehicleReadOnlyDTO {
     private Fuel fuel;
     private Gearbox gearbox;
     private String odometer;
+    private Set<Long> owners;
+    // private Set<Long> driverIds;
+    // private Set<Long> serviceRecordIds;
 }

@@ -8,17 +8,18 @@ import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Color;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Fuel;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Gearbox;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.VehicleType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
+// import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -66,24 +67,36 @@ public class Vehicle extends AbstractEntity {
     @Column(nullable = false)
     private String odometer;
 
-    @Getter(AccessLevel.PRIVATE)
-    @ManyToMany(mappedBy = "ownerVehicles")
+    @ManyToMany(
+        mappedBy = "ownerVehicles",
+        cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+        fetch = FetchType.LAZY)
     private Set<Owner> owners = new HashSet<>();
     
-    @Getter(AccessLevel.PRIVATE)
-    @ManyToMany(mappedBy = "driverVehicles")
-    private Set<Driver> drivers = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(name = "vehicles_service_records")
-    private Set<ServiceRecord> vehicleServiceRecords = new HashSet<>();
-
-    public void addServiceRecord(ServiceRecord serviceRecord) {
-        if (vehicleServiceRecords == null) vehicleServiceRecords = new HashSet<>();
-        vehicleServiceRecords.add(serviceRecord);
+    public void addOwner(Owner owner) {
+        owners.add(owner);
+        owner.getOwnerVehicles().add(this);
     }
 
-    public  boolean hasServiceRecords(ServiceRecord serviceRecord) {
-        return vehicleServiceRecords != null && !vehicleServiceRecords.isEmpty();
+    public void removeOwner(Owner owner) {
+        owners.remove(owner);
+        owner.getOwnerVehicles().remove(this);
     }
+    
+    // @Getter(AccessLevel.PRIVATE)
+    // @ManyToMany(mappedBy = "driverVehicles")
+    // private Set<Driver> drivers = new HashSet<>();
+
+    // @ManyToMany
+    // @JoinTable(name = "vehicles_service_records")
+    // private Set<ServiceRecord> vehicleServiceRecords = new HashSet<>();
+
+    // public void addServiceRecord(ServiceRecord serviceRecord) {
+    //     if (vehicleServiceRecords == null) vehicleServiceRecords = new HashSet<>();
+    //     vehicleServiceRecords.add(serviceRecord);
+    // }
+
+    // public  boolean hasServiceRecords(ServiceRecord serviceRecord) {
+    //     return vehicleServiceRecords != null && !vehicleServiceRecords.isEmpty();
+    // }
 }

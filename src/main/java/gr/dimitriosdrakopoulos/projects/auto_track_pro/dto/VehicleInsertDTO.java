@@ -1,6 +1,7 @@
 package gr.dimitriosdrakopoulos.projects.auto_track_pro.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Color;
 import gr.dimitriosdrakopoulos.projects.auto_track_pro.core.enums.Fuel;
@@ -48,4 +49,8 @@ public class VehicleInsertDTO {
 
     @NotEmpty(message = "Odometer must not be empty.")
     private String odometer;
+
+    private List<Long> owners;
+    // private List<Long> drivers;
+    // private List<Long> serviceRecords;
 }
